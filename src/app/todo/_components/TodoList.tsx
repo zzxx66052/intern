@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import TodoItem from "./TodoItem";
 import Spinner from "./Spinner";
 import { useFetchTodo } from "@/hooks/useFetchTodo";
+import { TodoItem } from "./TodoItem";
 
 const FILTERS = ["전체", "완료", "미완료"] as const;
 type FilterType = (typeof FILTERS)[number];

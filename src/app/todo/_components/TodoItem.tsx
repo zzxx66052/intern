@@ -1,37 +1,8 @@
-import { updateTodo } from "@/api/todo";
+import { useToggleTodo } from "@/hooks/useToggleTodo";
 import { Todo } from "@/types/todoType";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-interface TodoItemProps {
-  todo: Todo;
-}
-
-const TodoItem = ({ todo }: TodoItemProps) => {
-  const queryClient = useQueryClient();
-
-  const toggleMutation = useMutation({
-    mutationFn: (updated: Partial<Todo>) => updateTodo(todo.id, updated),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["todos"] });
-
-      const prevTodos = queryClient.getQueryData<Todo[]>(["todos"]);
-      queryClient.setQueryData<Todo[]>(["todos"], (old) =>
-        old?.map((t) =>
-          t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
-        )
-      );
-
-      return { prevTodos };
-    },
-    onError: (_, __, context) => {
-      if (context?.prevTodos) {
-        queryClient.setQueryData(["todos"], context.prevTodos);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
+export const TodoItem = ({ todo }: { todo: Todo }) => {
+  const toggleMutation = useToggleTodo(todo.id);
 
   return (
     <li className="flex items-start gap-3 rounded border p-4 shadow-sm">
@@ -56,5 +27,3 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     </li>
   );
 };
-
-export default TodoItem;
