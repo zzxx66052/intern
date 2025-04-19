@@ -1,34 +1,26 @@
 "use client";
 
 import { addTodo } from "@/api/todo";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 const TodoForm = () => {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: addTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-      setTitle("");
-      setContents("");
-    },
-  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && contents.trim()) {
-      const newTodo = {
-        title,
-        contents,
-        isCompleted: false,
-        createdAt: Date.now(),
-      };
-      mutation.mutate(newTodo);
-    }
+
+    if (!title.trim()) return;
+
+    addTodo({
+      title,
+      contents,
+      isCompleted: false,
+      createdAt: Date.now(),
+    });
+
+    setTitle("");
+    setContents("");
   };
 
   return (
