@@ -1,11 +1,13 @@
 "use client";
 
-import { addTodo } from "@/api/todo";
+import { useAddTodo } from "@/hooks/useAddTodo";
 import { useState } from "react";
 
 const TodoForm = () => {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+
+  const { mutate: addTodo } = useAddTodo();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
