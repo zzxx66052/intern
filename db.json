@@ -1,18 +1,3 @@
 {
-  "todos": [
-    {
-      "id": "da4d",
-      "title": "123123123",
-      "contents": "123123123",
-      "isCompleted": false,
-      "createdAt": 1745088850213
-    },
-    {
-      "id": "5e8b",
-      "title": "1234567",
-      "contents": "123466",
-      "isCompleted": false,
-      "createdAt": 1745088935280
-    }
-  ]
+  "todos": []
 }
