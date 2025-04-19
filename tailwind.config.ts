@@ -15,7 +15,7 @@ const config: Config = {
       },
       maxWidth: {
         mobile: "320px",
-        desktop: "768px",
+        desktop: "1024px",
       },
     },
   },
