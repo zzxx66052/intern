@@ -7,6 +7,9 @@ import { useUpdateTodo } from "@/hooks/useUpdateTodo";
 import { Todo } from "@/types/todoType";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import TodoCheckbox from "./TodoCheckbox";
+import TodoDisplay from "./TodoDisplay";
+import TodoEditForm from "./TodoEditForm";
 
 export const TodoItem = ({ todo }: { todo: Todo }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -72,59 +75,34 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
   return (
     <li className="flex flex-col gap-2 rounded border p-4 shadow-sm sm:flex-row sm:justify-between sm:items-start">
       <div
-        className={`flex flex-col items-start gap-2 ${
+        className={`flex flex-col items-start ${
           isEditing ? `flex-1 w-full` : ""
         }`}
       >
-        <input
-          type="checkbox"
-          checked={todo.isCompleted}
-          onChange={() =>
-            toggleMutation.mutate({ isCompleted: !todo.isCompleted })
-          }
-          className="h-5 w-5 cursor-pointer accent-green-500 transition-transform duration-200 hover:scale-125"
-        />
-
         {isEditing ? (
-          <>
-            <input
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              className="w-full rounded border p-2"
-            />
-            <textarea
-              value={newContents}
-              onChange={(e) => setNewContents(e.target.value)}
-              className="w-full rounded border p-2"
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={handleSave}
-                className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-700"
-              >
-                저장
-              </button>
-              <button
-                onClick={handleCancel}
-                className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-700"
-              >
-                취소
-              </button>
-            </div>
-          </>
+          <TodoEditForm
+            newTitle={newTitle}
+            newContents={newContents}
+            onChangeTitle={setNewTitle}
+            onChangeContents={setNewContents}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         ) : (
-          <>
-            <h3
-              className={`text-lg font-semibold ${
-                todo.isCompleted ? "line-through text-gray-400" : ""
-              }`}
-            >
-              제목: {todo.title}
-            </h3>
-            <p className="text-sm text-gray-600 break-words">
-              내용: {todo.contents}
-            </p>
-          </>
+          <div className="flex flex-col">
+            <TodoCheckbox
+              todo={todo}
+              onToggle={() =>
+                toggleMutation.mutate({ isCompleted: !todo.isCompleted })
+              }
+            />
+
+            <TodoDisplay
+              title={todo.title}
+              contents={todo.contents}
+              isCompleted={todo.isCompleted}
+            />
+          </div>
         )}
       </div>
 
